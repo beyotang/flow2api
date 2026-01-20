@@ -39,6 +39,11 @@ RUN playwright install chromium
 
 COPY . .
 
-EXPOSE 8000
+# Zeabur 会动态设置 PORT 环境变量，默认 8000
+ENV PORT=8000
 
-CMD ["python", "main.py"]
+# 暴露端口（Zeabur 会自动处理）
+EXPOSE ${PORT}
+
+# ✅ 关键修改：使用 uvicorn 直接启动，监听 0.0.0.0 和 $PORT
+CMD uvicorn src.main:app --host 0.0.0.0 --port ${PORT}
